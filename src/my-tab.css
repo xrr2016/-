@@ -1,0 +1,94 @@
+.my-tab {
+  width: 90%;
+  max-width: 1000px;
+  margin: 10px auto;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+.my-tab.card {
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
+}
+.my-tab .my-tab-list {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid #e2e2e2;
+}
+.my-tab .my-tab-list.card {
+  background: #f2f2f2;
+}
+.my-tab .my-tab-list.fixed-width {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.my-tab .my-tab-list .indicator {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  background: blueviolet;
+  will-change: left, right, transform;
+  transition: all .4s ease-in-out;
+  transform: scaleX(1);
+}
+.my-tab .my-tab-list .indicator.card {
+  opacity: 0;
+}
+.my-tab .my-tab-list .tab {
+  position: relative;
+  display: inline-block;
+  min-width: 65px;
+  padding: 0 24px;
+  margin: 0 -1px;
+  height: 40px;
+  line-height: 40px;
+  color: blueviolet;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  vertical-align: baseline;
+}
+.my-tab .my-tab-list .tab.fixed-width {
+  flex: 1;
+}
+.my-tab .my-tab-list .tab.card {
+  border-left: 1px solid #e2e2e2;
+  border-right: 1px solid #e2e2e2;
+  background: #ffffff;
+}
+.my-tab .my-tab-list .tab.card::after {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  content: '';
+  width: 100%;
+  height: 1px;
+  z-index: 100;
+  background: #ffffff;
+}
+.my-tab .my-tab-list .tab.disabled {
+  cursor: default;
+}
+.my-tab .my-tab-content {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+}
+
+.my-tab .my-tab-content .item {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  padding: 12px 24px;
+  transform: translateX(0px);
+  transition: all .4s ease-in-out;
+}
+

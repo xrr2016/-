@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>myTab</title>
+  <link rel="stylesheet" href="./src/my-tab.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      padding-top: 10px;
+      margin: 0;
+      height: 100%;
+      background: #fcfcfc;
+    }
+
+    h4 {
+      width: 90%;
+      max-width: 1000px;
+      margin: 24px auto;
+    }
+  </style>
+</head>
+
+<body>
+  <h4>Flat Theme</h4>
+  <div class="my-tab">
+    <ul class="my-tab-list">
+      <li data-index="0" class="tab">选项1</li>
+      <li data-index="1" class="tab">选项2</li>
+      <li data-index="2" class="tab">选项3</li>
+      <!-- <li class="tab disabled">DISABLED TAB</li> -->
+      <li class="indicator"></li>
+    </ul>
+    <div class="my-tab-content" style="width: 300%;">
+      <div data-index="0" class="item">
+       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus labore nam mollitia dolorem. Voluptates dolorem
+        est distinctio aliquid qui unde molestiae nobis eaque cum pariatur quisquam corrupti, mollitia, perferendis eligendi?
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat quia dignissimos maxime, accusantium et libero
+        voluptate dolores nam? Illum maxime fugiat veniam quisquam unde nulla? Soluta laboriosam exercitationem magni sequi.
+      </div>
+      <div data-index="1" class="item">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. In sunt repellendus labore, consequatur sed corporis voluptatem
+        rerum rem quasi maiores alias laborum unde sit minima incidunt quos praesentium itaque sapiente. Lorem ipsum, dolor
+        sit amet consectetur adipisicing elit. Iste, corrupti quia unde voluptate dignissimos ut reiciendis omnis? Non odit
+        voluptas sequi, suscipit harum dolor distinctio, ea temporibus porro quos voluptatum.
+      </div>
+      <div data-index="2" class="item">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, recusandae cupiditate nam totam nostrum vel. Harum
+        ea cum eos necessitatibus, quaerat earum, temporibus id soluta rerum velit, voluptatum non ipsum! Lorem ipsum dolor
+        sit amet, consectetur adipisicing elit. Voluptatum, consequatur quae deserunt vel officiis veniam distinctio totam
+        eum fuga maiores exercitationem earum maxime itaque, delectus aspernatur at dignissimos eius tempora.
+      </div>
+    </div>
+  </div>
+  <h4>Card Theme</h4>
+  <section class="my-tab-2">
+    <div class="my-tab-content">
+      <div class="item">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet error porro similique illo nesciunt est! Harum facere
+        maiores fuga officiis, porro exercitationem tempora, voluptatem accusantium ad dolorum veritatis eius assumenda.</div>
+      <div class="item">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet error porro similique illo nesciunt est! Harum facere
+        maiores fuga officiis, porro exercitationem tempora, voluptatem accusantium ad dolorum veritatis eius assumenda.</div>
+      <div class="item">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet error porro similique illo nesciunt est! Harum facere
+        maiores fuga officiis, porro exercitationem tempora, voluptatem accusantium ad dolorum veritatis eius assumenda.</div>
+    </div>
+  </section>
+  <script src="./src/index.js"></script>
+  <script src="./src/myTab.js"></script>
+</body>
+
+</html>
