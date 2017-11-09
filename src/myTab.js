@@ -16,7 +16,7 @@ class MyTab {
     this.triggerEvent = opts.triggerEvent
     this.loop = opts.loop
     this.container = document.querySelector(this.selector)
-    this.insertStyle()
+    // this.insertStyle()
     this.init()
   }
 
@@ -25,15 +25,28 @@ class MyTab {
     if (this.theme === 'card') {
       this.container.classList.add('card')
     }
+
     this.tabList = this.generateTabs()
     this.tabContent = this.container.querySelector('.my-tab-content')
+    if (!this.tabContent) { throw new Error('需要添加内容。')}
     this.tabContent.style.width = this.tabs.length * 100 + '%'
     this.container.insertBefore(this.tabList, this.tabContent)
+    this.tabWidth = this.tabList.firstChild.getBoundingClientRect().width
+
     this.indicator = this.generateIndicator()
     this.tabList.appendChild(this.indicator)
 
     this.node2Array(this.tabList.children).forEach(tab => {
-      tab.addEventListener(this.triggerEvent, this.handleTabChange.bind(this))
+      tab.addEventListener(
+        this.triggerEvent,
+        this.handleTabChange.bind(this),
+        false
+      )
+    })
+
+    this.node2Array(this.tabContent.children).forEach(content => {
+      content.addEventListener('touchstart', this.moveStart.bind(this), false)
+      content.addEventListener('touchend', this.moveEnd.bind(this), false)
     })
 
     this.indexContentItem()
@@ -60,6 +73,10 @@ class MyTab {
       li.innerHTML = tab.title
       li.dataset.index = index
       li.style.color = this.color
+      li.style.height = this.tabHeight
+      if (index === this.defaultIndex) {
+        li.classList.add('active')
+      }
       if (this.fixedWidth) {
         li.classList.add('fixed-width')
       }
@@ -85,7 +102,7 @@ class MyTab {
     const indicator = document.createElement('div')
     indicator.classList.add('indicator')
     if (this.theme === 'card') {
-      indicator.classList.add('card')
+      indicator.classList.add('hide')
     }
     indicator.style.width = width + 'px'
     indicator.style.background = this.color
@@ -194,31 +211,64 @@ class MyTab {
   handleTabChange(event) {
     const target = event.target
     if (target.classList.contains('disabled')) return
+    const tabs = this.node2Array(this.tabList.children)
     const index = parseInt(target.dataset.index, 10)
-    const targetW = target.getBoundingClientRect().width
-    if (this.theme === 'card') {
-      const tabs = this.container.querySelectorAll('.my-tab-list .tab')
-      for (let index = 0; index < tabs.length; index++) {
-        const tab = tabs[index]
-        tab.classList.remove('card')
-      }
-      target.classList.add('card')
+    this.currentIndex = index
+    this.changeTab(this.currentIndex, target)
+  }
+
+  moveStart(event) {
+    this.touchStart = 0
+    const touchs = event.targetTouches
+    this.touchStart = touchs[0].pageX
+  }
+
+  moveEnd(event) {
+    this.touchEnd = 0
+    const touchs = event.changedTouches
+    this.touchEnd = touchs[0].pageX
+    const offset = this.touchEnd - this.touchStart
+    if (Math.abs(offset) >= 50 && offset > 0) {
+      this.nextTab()
+    } else {
+      this.prevTab()
     }
-    this.moveIndicator(index, targetW)
+  }
+
+  nextTab() {
+    ++this.currentIndex
+    this.currentIndex = Math.min(this.tabs.length - 1, this.currentIndex)
+    this.changeTab(this.currentIndex)
+  }
+
+  prevTab() {
+    --this.currentIndex
+    this.currentIndex = Math.max(0, this.currentIndex)
+    this.changeTab(this.currentIndex)
+  }
+  
+  changeTab (index) {
+    const tabs = this.node2Array(this.tabList.children)
+    if (this.theme === 'card') {
+      tabs.forEach(tab => tab.classList.remove('card'))
+      tabs[index].classList.add('card')
+    }
+    tabs.forEach(tab => tab.classList.remove('active'))
+    tabs[index].classList.add('active')
+    this.moveIndicator(index)
     this.changeContentItem(index)
   }
 
-  moveIndicator(index, width) {
+  moveIndicator(index) {
     this.indicator.style.transform = 'scaleX(.7)'
-    this.indicator.style.left = index * width + 'px'
+    this.indicator.style.left = index * this.tabWidth + 'px'
     setTimeout(() => {
       this.indicator.style.transform = 'scaleX(1)'
     }, this.moveTime)
   }
 
   changeContentItem(index) {
-    const items = this.container.querySelectorAll('.my-tab-content .item')
-    items.forEach(item => {
+    this.node2Array(this.tabContent.children).forEach(item => {
       item.style.transform = `translateX(${-index * 100}%)`
     })
   }
@@ -264,5 +314,17 @@ const tab3 = new MyTab({
     { title: '选项3', disabled: false },
     { title: '选项4', disabled: false },
     { title: '选项5', disabled: false }
+  ]
+})
+
+const tab4 = new MyTab({
+  selector: '.my-tab-4',
+  color: '#00a497',
+  tabs: [
+    { title: '我', disabled: false },
+    { title: '火', disabled: false },
+    { title: '总', disabled: false },
+    { title: '冠', disabled: false },
+    { title: '军', disabled: false }
   ]
 })
