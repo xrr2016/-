@@ -1,4 +1,4 @@
-class MyTab {
+export default class MyTab {
   constructor(config = {}) {
     let opts = Object.create(MyTab.opts)
     opts = Object.assign(opts, config)
@@ -9,6 +9,7 @@ class MyTab {
     this.theme = opts.theme
     this.fixedWidth = opts.fixedWidth
     this.color = opts.color
+    this.fontSize = opts.fontSize
     this.tabHeight = opts.tabHeight
     this.timingFunc = opts.timingFunc
     this.width = opts.width
@@ -16,19 +17,20 @@ class MyTab {
     this.triggerEvent = opts.triggerEvent
     this.loop = opts.loop
     this.container = document.querySelector(this.selector)
-    // this.insertStyle()
+    this.insertStyle()
     this.init()
   }
-
+  
   init() {
     this.container.classList.add('my-tab')
     if (this.theme === 'card') {
       this.container.classList.add('card')
     }
-
     this.tabList = this.generateTabs()
     this.tabContent = this.container.querySelector('.my-tab-content')
-    if (!this.tabContent) { throw new Error('需要添加内容。')}
+    if (!this.tabContent) {
+      throw new Error('需要添加内容。')
+    }
     this.tabContent.style.width = this.tabs.length * 100 + '%'
     this.container.insertBefore(this.tabList, this.tabContent)
     this.tabWidth = this.tabList.firstChild.getBoundingClientRect().width
@@ -63,7 +65,7 @@ class MyTab {
       items[index].dataset.index = index
     })
   }
-
+  // 生成选项按钮
   generateTabs() {
     const tabList = document.createElement('ul')
     tabList.classList.add('my-tab-list')
@@ -73,6 +75,7 @@ class MyTab {
       li.innerHTML = tab.title
       li.dataset.index = index
       li.style.color = this.color
+      li.style.fontSize = this.fontSize
       li.style.height = this.tabHeight
       if (index === this.defaultIndex) {
         li.classList.add('active')
@@ -94,7 +97,7 @@ class MyTab {
     }
     return tabList
   }
-
+  // 生成指示
   generateIndicator() {
     const width = Math.floor(
       this.tabList.firstChild.getBoundingClientRect().width
@@ -111,7 +114,10 @@ class MyTab {
 
   insertStyle() {
     const styleEle = document.createElement('style')
-    styleEle.innerHTML = `.my-tab {
+    styleEle.innerHTML = `.my-tab * {
+      box-sizing: border-box;
+    }
+    .my-tab {
       width: 90%;
       max-width: 1000px;
       margin: 10px auto;
@@ -136,10 +142,9 @@ class MyTab {
     }
     .my-tab .my-tab-list.fixed-width {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
     }
-    
     .my-tab .my-tab-list .indicator {
       position: absolute;
       left: 0;
@@ -147,34 +152,43 @@ class MyTab {
       height: 2px;
       background: blueviolet;
       will-change: left, right, transform;
-      transition: all .4s ease-in-out;
+      transition: all .3s ease-in-out;
       transform: scaleX(1);
     }
-    .my-tab .my-tab-list .indicator.card {
+    .my-tab .my-tab-list .indicator.hide {
       opacity: 0;
     }
     .my-tab .my-tab-list .tab {
       position: relative;
       display: inline-block;
-      min-width: 65px;
       padding: 0 24px;
-      margin: 0 -1px;
       height: 40px;
       line-height: 40px;
-      color: blueviolet;
       font-weight: 500;
       text-align: center;
+      opacity: .6;
       cursor: pointer;
-      border: 1px solid transparent;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       vertical-align: baseline;
+      border: 1px solid transparent;
     }
-    .my-tab .my-tab-list .tab.fixed-width {
-      flex: 1;
+    @media  (max-width: 575px) {
+      .my-tab .my-tab-list .tab {
+        padding: 0 12px;
+        font-size: 12px;
+      }
+    }
+    .my-tab .my-tab-list .tab.active {
+      opacity: 1;
     }
     .my-tab .my-tab-list .tab.card {
       border-left: 1px solid #e2e2e2;
       border-right: 1px solid #e2e2e2;
       background: #ffffff;
+    }
+    .my-tab .my-tab-list .tab.fixed-width {
+      flex: 1;
     }
     .my-tab .my-tab-list .tab.card::after {
       position: absolute;
@@ -202,7 +216,14 @@ class MyTab {
       height: 100%;
       padding: 12px 24px;
       transform: translateX(0px);
-      transition: all .4s ease-in-out;
+      transition: all .3s ease-in-out;
+    }
+    .my-tab .my-tab-content .item.img {
+      padding: 0;
+    }
+    .my-tab .my-tab-content .item img {
+      width: 100%;
+      display: block;
     }
     `
     document.head.appendChild(styleEle)
@@ -246,8 +267,8 @@ class MyTab {
     this.currentIndex = Math.max(0, this.currentIndex)
     this.changeTab(this.currentIndex)
   }
-  
-  changeTab (index) {
+
+  changeTab(index) {
     const tabs = this.node2Array(this.tabList.children)
     if (this.theme === 'card') {
       tabs.forEach(tab => tab.classList.remove('card'))
@@ -281,6 +302,7 @@ MyTab.opts = {
   theme: 'flat', // card
   fixedWidth: false,
   color: 'blueviolet',
+  fontSize: 14,
   width: 600,
   tabHeight: 40,
   timingFunc: 'ease-in-out',
@@ -294,37 +316,3 @@ MyTab.opts = {
   moveTime: 300
 }
 
-const tab1 = new MyTab({
-  selector: '.my-tab-1'
-})
-
-const tab2 = new MyTab({
-  selector: '.my-tab-2',
-  theme: 'card',
-  color: '#3498db'
-})
-
-const tab3 = new MyTab({
-  selector: '.my-tab-3',
-  color: '#e74c3c',
-  fixedWidth: true,
-  tabs: [
-    { title: '选项1', disabled: false },
-    { title: '选项2', disabled: false },
-    { title: '选项3', disabled: false },
-    { title: '选项4', disabled: false },
-    { title: '选项5', disabled: false }
-  ]
-})
-
-const tab4 = new MyTab({
-  selector: '.my-tab-4',
-  color: '#00a497',
-  tabs: [
-    { title: '我', disabled: false },
-    { title: '火', disabled: false },
-    { title: '总', disabled: false },
-    { title: '冠', disabled: false },
-    { title: '军', disabled: false }
-  ]
-})
